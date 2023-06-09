@@ -7,6 +7,125 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dim_confidence {
+  id_confidence    Int     @id @default(autoincrement())
+  confidence_level String? @db.VarChar(10)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dim_location {
+  id_location Int                      @id @default(autoincrement())
+  pulau       String?                  @db.VarChar(50)
+  provinsi    String?                  @db.VarChar(50)
+  kab_kota    String?                  @db.VarChar(50)
+  kecamatan   String?                  @db.VarChar(50)
+  desa        String?                  @db.VarChar(50)
+  geom_desa   Unsupported("geometry")?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dim_satelite {
+  id_satelite   Int     @id @default(autoincrement())
+  satelite_name String? @db.VarChar(20)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model dim_time {
+  id_time  DateTime @id @db.Date
+  tahun    Int?
+  semester Int?
+  kuartal  String?  @db.VarChar(5)
+  bulan    String?  @db.VarChar(25)
+  minggu   Int?
+  hari     String?  @db.VarChar(25)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model fact_hotspot {
+  id_location   Int?
+  id_time       DateTime? @db.Date
+  id_satelite   Int?
+  id_confidence Int?
+  hotspot_count Int?
+
+  @@ignore
+}
+
+model hotspot_sipongi {
+  hs_id            DateTime? @db.Timestamptz(6)
+  date_hotspot_ori DateTime? @db.Timestamptz(6)
+  provinsi_id      Int?
+  lat              Float?
+  long             Float?
+  sumber           String?   @db.VarChar(25)
+  ori_sumber       String?   @db.VarChar(25)
+  date_hotspot     String?   @db.VarChar(50)
+  desa_id          String?   @db.VarChar
+  counter          Int?
+  confidence       Int?
+  confidence_level String?   @db.VarChar(10)
+  kawasan          String?   @db.VarChar(255)
+  desa             String?   @db.VarChar(255)
+  kecamatan        String?   @db.VarChar(255)
+  kabkota          String?   @db.VarChar(255)
+  nama_provinsi    String?   @db.VarChar(255)
+  pulau            String?   @db.VarChar(255)
+  id               Int       @id @default(autoincrement())
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model temp_db_hotspot {
+  hs_id            DateTime? @db.Timestamptz(6)
+  date_hotspot_ori DateTime? @db.Timestamptz(6)
+  provinsi_id      Int?
+  lat              Float?
+  long             Float?
+  sumber           String?   @db.VarChar(25)
+  ori_sumber       String?   @db.VarChar(25)
+  date_hotspot     String?   @db.VarChar(50)
+  desa_id          String?   @db.VarChar
+  counter          Int?
+  confidence       Int?
+  confidence_level String?   @db.VarChar(10)
+  kawasan          String?   @db.VarChar(255)
+  desa             String?   @db.VarChar(255)
+  kecamatan        String?   @db.VarChar(255)
+  kabkota          String?   @db.VarChar(255)
+  nama_provinsi    String?   @db.VarChar(255)
+  pulau            String?   @db.VarChar(255)
+  id               Int       @id @default(autoincrement())
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model backup_fact {
+  id_location   Int?
+  id_time       DateTime? @db.Date
+  id_satelite   Int?
+  id_confidence Int?
+  hotspot_count Int?
+
+  @@ignore
+}
+
 model backup_hotspot {
   hs_id            DateTime? @db.Timestamptz(6)
   date_hotspot_ori DateTime? @db.Timestamptz(6)
@@ -67,74 +186,4 @@ model batas_desa_big_2020 {
 
 model coba {
   id BigInt @id
-}
-
-model dim_confidence {
-  id_confidence    Int     @id @default(autoincrement())
-  confidence_level String? @db.VarChar(10)
-}
-
-model dim_location {
-  id_location Int                      @id @default(autoincrement())
-  pulau       String?                  @db.VarChar(50)
-  provinsi    String?                  @db.VarChar(50)
-  kab_kota    String?                  @db.VarChar(50)
-  kecamatan   String?                  @db.VarChar(50)
-  desa        String?                  @db.VarChar(50)
-  geom_desa   Unsupported("geometry")?
-}
-
-model dim_satelite {
-  id_satelite   Int     @id @default(autoincrement())
-  satelite_name String? @db.VarChar(20)
-}
-
-model dim_time {
-  id_time  DateTime @id @db.Date
-  tahun    Int?
-  semester Int?
-  kuartal  String?  @db.VarChar(5)
-  bulan    String?  @db.VarChar(25)
-  minggu   Int?
-  hari     String?  @db.VarChar(25)
-}
-
-model fact_hotspot {
-  id_location   Int?
-  id_time       DateTime? @db.Date
-  id_satelite   Int?
-  id_confidence Int?
-  hotspot_count Int?
-  id            Int       @id @default(autoincrement())
-}
-
-model hotspot_sipongi {
-  hs_id            DateTime? @db.Timestamptz(6)
-  date_hotspot_ori DateTime? @db.Timestamptz(6)
-  provinsi_id      Int?
-  lat              Float?
-  long             Float?
-  sumber           String?   @db.VarChar(25)
-  ori_sumber       String?   @db.VarChar(25)
-  date_hotspot     String?   @db.VarChar(50)
-  desa_id          String?   @db.VarChar
-  counter          Int?
-  confidence       Int?
-  confidence_level String?   @db.VarChar(10)
-  kawasan          String?   @db.VarChar(255)
-  desa             String?   @db.VarChar(255)
-  kecamatan        String?   @db.VarChar(255)
-  kabkota          String?   @db.VarChar(255)
-  nama_provinsi    String?   @db.VarChar(255)
-  pulau            String?   @db.VarChar(255)
-  id               Int       @id @default(autoincrement())
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model spatial_ref_sys {
-  srid      Int     @id
-  auth_name String? @db.VarChar(256)
-  auth_srid Int?
-  srtext    String? @db.VarChar(2048)
-  proj4text String? @db.VarChar(2048)
 }
