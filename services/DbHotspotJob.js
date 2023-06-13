@@ -7,7 +7,6 @@ class DbHotspotJob {
     await this._prisma.$executeRaw`
         TRUNCATE TABLE temp_db_hotspot;
     `;
-
     await this._prisma.temp_db_hotspot.createMany({
       data: hotspots,
     });

@@ -3,17 +3,17 @@ class DwHotspotJob {
     this._prisma = prisma;
   }
 
-  async updateDimTime(time) {
+  async updateDimTime() {
     const result = await this._prisma.$executeRaw`
         INSERT INTO dim_time(id_time, tahun, semester, kuartal, bulan, minggu, hari)
-        SELECT (${time})::date AS id_time,
-                EXTRACT(YEAR FROM (${time})::date) AS tahun,
+        SELECT (h.hs_id)::date AS id_time,
+                EXTRACT(YEAR FROM (h.hs_id)::date) AS tahun,
                 CASE
-        WHEN EXTRACT(MONTH FROM (${time})::date) <= 6 THEN 1
+        WHEN EXTRACT(MONTH FROM (h.hs_id)::date) <= 6 THEN 1
         ELSE 2
         END AS semester,
-        CONCAT('Q', CEIL(EXTRACT(MONTH FROM (${time})::date) / 3.0)) AS kuartal,
-        CASE EXTRACT(MONTH FROM (${time})::date)
+        CONCAT('Q', CEIL(EXTRACT(MONTH FROM (h.hs_id)::date) / 3.0)) AS kuartal,
+        CASE EXTRACT(MONTH FROM (h.hs_id)::date)
         WHEN 1 THEN 'Januari'
         WHEN 2 THEN 'Februari'
         WHEN 3 THEN 'Maret'
@@ -28,10 +28,10 @@ class DwHotspotJob {
         WHEN 12 THEN 'Desember'
         END AS bulan,
         CASE
-        WHEN EXTRACT(WEEK FROM (${time})::date) <= 4 THEN EXTRACT(WEEK FROM (${time})::date)
+        WHEN EXTRACT(WEEK FROM (h.hs_id)::date) <= 4 THEN EXTRACT(WEEK FROM (h.hs_id)::date)
         ELSE 4
         END AS minggu,
-        CASE EXTRACT(DOW FROM (${time})::date)
+        CASE EXTRACT(DOW FROM (h.hs_id)::date)
         WHEN 0 THEN 'Minggu'
         WHEN 1 THEN 'Senin'
         WHEN 2 THEN 'Selasa'
@@ -40,9 +40,10 @@ class DwHotspotJob {
         WHEN 5 THEN 'Jumat'
         WHEN 6 THEN 'Sabtu'
         END AS hari
+        FROM hotspot_sipongi h
         WHERE NOT EXISTS (
             SELECT id_time FROM dim_time
-            WHERE id_time = (${time})::date -- Kolom yang dijadikan unik
+            WHERE id_time = (h.hs_id)::date -- Kolom yang dijadikan unik
         );
     `;
     console.log(">>> Update dimensi time berhasil :", result);

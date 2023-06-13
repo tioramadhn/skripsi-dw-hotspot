@@ -14,8 +14,8 @@ const getHotspots = async (url) => {
 };
 
 const getDate = () => {
-  //   const timestamp = Date.now();
-  const timestamp = new Date("2023-6-2");
+    const timestamp = Date.now();
+//   const timestamp = new Date("2023-6-9");
   const dateObj = dayjs(timestamp).utcOffset("+07:00"); // Mengatur offset zona waktu untuk WIB
   return dateObj.format("YYYY-MM-DD");
 };

@@ -34,7 +34,6 @@ const dwHotspotJob = () => {
   try {
     alertText("Memulai DB Hotspot Job");
     const date = getDate(); //Mendapatkan tanggal hari ini
-    const url = setAndGetURL(date); //Memasang atribut tanggal pada endpoint sipongi
     // Modul Datawarohouse hotspot
     dw.updateDimTime(date);
     dw.updateDimSatelite();
@@ -47,5 +46,5 @@ const dwHotspotJob = () => {
 // detik(0-59) menit(0-59) jam(0-23) tanggal(1-31) bulan(1-12 or names) dow(0-7 or names)
 // cron.schedule("*/1 * * * *", dbHotspotJob, config);
 // cron.schedule("59 23 * * *", dwHotspotJob, config);
-// dwHotspotJob();
-dbHotspotJob();
+dwHotspotJob();
+// dbHotspotJob();

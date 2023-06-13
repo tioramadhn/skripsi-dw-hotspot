@@ -9,7 +9,7 @@ datasource db {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model dim_confidence {
-  id_confidence    Int     @id @default(autoincrement())
+  id_confidence    Int     @default(autoincrement())
   confidence_level String? @db.VarChar(10)
 
   @@ignore
@@ -17,7 +17,7 @@ model dim_confidence {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model dim_location {
-  id_location Int                      @id @default(autoincrement())
+  id_location Int                      @default(autoincrement())
   pulau       String?                  @db.VarChar(50)
   provinsi    String?                  @db.VarChar(50)
   kab_kota    String?                  @db.VarChar(50)
@@ -30,7 +30,7 @@ model dim_location {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model dim_satelite {
-  id_satelite   Int     @id @default(autoincrement())
+  id_satelite   Int     @default(autoincrement())
   satelite_name String? @db.VarChar(20)
 
   @@ignore
@@ -38,7 +38,7 @@ model dim_satelite {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model dim_time {
-  id_time  DateTime @id @db.Date
+  id_time  DateTime @db.Date
   tahun    Int?
   semester Int?
   kuartal  String?  @db.VarChar(5)
@@ -60,6 +60,7 @@ model fact_hotspot {
   @@ignore
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model hotspot_sipongi {
   hs_id            DateTime? @db.Timestamptz(6)
   date_hotspot_ori DateTime? @db.Timestamptz(6)
@@ -79,7 +80,8 @@ model hotspot_sipongi {
   kabkota          String?   @db.VarChar(255)
   nama_provinsi    String?   @db.VarChar(255)
   pulau            String?   @db.VarChar(255)
-  id               Int       @id @default(autoincrement())
+
+  @@ignore
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -91,6 +93,8 @@ model spatial_ref_sys {
   proj4text String? @db.VarChar(2048)
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model temp_db_hotspot {
@@ -112,78 +116,5 @@ model temp_db_hotspot {
   kabkota          String?   @db.VarChar(255)
   nama_provinsi    String?   @db.VarChar(255)
   pulau            String?   @db.VarChar(255)
-  id               Int       @id @default(autoincrement())
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model backup_fact {
-  id_location   Int?
-  id_time       DateTime? @db.Date
-  id_satelite   Int?
-  id_confidence Int?
-  hotspot_count Int?
-
-  @@ignore
-}
-
-model backup_hotspot {
-  hs_id            DateTime? @db.Timestamptz(6)
-  date_hotspot_ori DateTime? @db.Timestamptz(6)
-  provinsi_id      Int?
-  lat              Float?
-  long             Float?
-  sumber           String?   @db.VarChar(25)
-  ori_sumber       String?   @db.VarChar(25)
-  date_hotspot     String?   @db.VarChar(50)
-  desa_id          String?   @db.VarChar
-  counter          Int?
-  confidence       Int?
-  confidence_level String?   @db.VarChar(10)
-  kawasan          String?   @db.VarChar(255)
-  desa             String?   @db.VarChar(255)
-  kecamatan        String?   @db.VarChar(255)
-  kabkota          String?   @db.VarChar(255)
-  nama_provinsi    String?   @db.VarChar(255)
-  pulau            String?   @db.VarChar(255)
-  id               Int       @id @default(autoincrement())
-}
-
-model batas_desa_big_2020 {
-  gid        Int                      @id @default(autoincrement())
-  layer      String?                  @db.VarChar(17)
-  elevation  Int?                     @db.SmallInt
-  objectid   Int?
-  namobj     String?                  @db.VarChar(44)
-  fcode      String?                  @db.VarChar(10)
-  remark     String?                  @db.VarChar(118)
-  metadata   String?                  @db.VarChar(45)
-  srs_id     String?                  @db.VarChar(9)
-  kdbbps     String?                  @db.VarChar(5)
-  kdcbps     String?                  @db.VarChar(9)
-  kdcpum     String?                  @db.VarChar(18)
-  kdebps     String?                  @db.VarChar(14)
-  kdepum     String?                  @db.VarChar(30)
-  kdpbps     String?                  @db.VarChar(10)
-  kdpkab     String?                  @db.VarChar(19)
-  kdppum     String?                  @db.VarChar(7)
-  luaswh     String?                  @db.VarChar(15)
-  tipadm     String?                  @db.VarChar(3)
-  wadmkc     String?                  @db.VarChar(31)
-  wadmkd     String?                  @db.VarChar(44)
-  wadmkk     String?                  @db.VarChar(33)
-  wadmpr     String?                  @db.VarChar(26)
-  wiadkc     String?                  @db.VarChar(50)
-  wiadkk     String?                  @db.VarChar(35)
-  wiadpr     String?                  @db.VarChar(29)
-  wiadkd     String?                  @db.VarChar(23)
-  uupp       String?                  @db.VarChar(97)
-  shape_area Decimal?                 @db.Decimal
-  shape_len  Decimal?                 @db.Decimal
-  geom       Unsupported("geometry")?
-
-  @@index([geom], type: Gist)
-}
-
-model coba {
-  id BigInt @id
+  id_temp          Int       @id @default(autoincrement())
 }
