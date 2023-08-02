@@ -13,6 +13,23 @@ const prisma = new PrismaClient();
 const db = new DbHotspotJob(prisma);
 const dw = new DwHotspotJob(prisma);
 
+// Data hotspot init
+const initDataHostpot = async (from, to) => {
+  try {
+    alertText("Inisialisasi data hotspot");
+    const url = setAndGetURL({ from, to });
+    const hotspots = await getHotspots(url);
+    console.log("Total hotspot : ", hotspots?.length ?? 0);
+    if (hotspots) {
+      await db.updateHotspotSipongi(hotspots);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+// initDataHostpot("2023-7-1", "2023-8-2");
+
 // Modul ETL
 const dbHotspotJob = async () => {
   try {
@@ -33,18 +50,18 @@ const dbHotspotJob = async () => {
 const dwHotspotJob = () => {
   try {
     alertText("Memulai DB Hotspot Job");
-    const date = getDate(); //Mendapatkan tanggal hari ini
     // Modul Datawarohouse hotspot
-    dw.updateDimTime(date);
+    dw.updateDimTime();
     dw.updateDimSatelite();
     dw.updateDimConfidence();
+    // dw.updateDimLocation();
     dw.updateFactHotspot();
   } catch (error) {
     console.log(error.message);
   }
 };
 // detik(0-59) menit(0-59) jam(0-23) tanggal(1-31) bulan(1-12 or names) dow(0-7 or names)
-// cron.schedule("*/1 * * * *", dbHotspotJob, config);
-// cron.schedule("59 23 * * *", dwHotspotJob, config);
-dwHotspotJob();
+cron.schedule("*/1 * * * *", dbHotspotJob, config);
+cron.schedule("59 23 * * *", dwHotspotJob, config);
+// dwHotspotJob();
 // dbHotspotJob();

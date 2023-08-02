@@ -14,8 +14,8 @@ const getHotspots = async (url) => {
 };
 
 const getDate = () => {
-    const timestamp = Date.now();
-//   const timestamp = new Date("2023-6-9");
+  const timestamp = Date.now();
+  //   const timestamp = new Date("2023-6-9");
   const dateObj = dayjs(timestamp).utcOffset("+07:00"); // Mengatur offset zona waktu untuk WIB
   return dateObj.format("YYYY-MM-DD");
 };
@@ -31,8 +31,8 @@ const alertText = (text) => {
   console.log("Tanggal :", getDate());
   console.log("Jam :", getHour(), "WIB");
 };
-
-const setAndGetURL = (date, from, to) => {
+// DATE FORMAT : YYYY-MM-DD
+const setAndGetURL = ({ date, from, to }) => {
   const FROM = date ?? from;
   const TO = date ?? to;
   return `https://sipongi.menlhk.go.id/api/opsroom/indoHotspot?wilayah=IN&filterperiode=true&from=${FROM}&to=${TO}&late=custom&satelit[]=LPN-MODIS&satelit[]=LPN-NPP&satelit[]=LPN-NOAA20&confidence[]=high&confidence[]=medium&confidence[]=low`;
