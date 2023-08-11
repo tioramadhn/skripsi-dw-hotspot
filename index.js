@@ -49,6 +49,8 @@ const dbHotspotJob = async () => {
   }
 };
 
+let isAlreadyRun = false;
+
 const dwHotspotJob = () => {
   try {
     alertText("Memulai DW Hotspot Job");
@@ -56,14 +58,20 @@ const dwHotspotJob = () => {
     dw.updateDimTime();
     dw.updateDimSatelite();
     dw.updateDimConfidence();
-    // dw.updateDimLocation();
+    if (!isAlreadyRun) {
+      dw.updateDimLocation();
+      isAlreadyRun = true;
+    }
     dw.updateFactHotspot();
   } catch (error) {
     console.log(error.message);
   }
 };
+
 // detik(0-59) menit(0-59) jam(0-23) tanggal(1-31) bulan(1-12 or names) dow(0-7 or names)
 cron.schedule("*/30 1-23 * * *", dbHotspotJob, configTime);
 cron.schedule("59 23 * * *", dwHotspotJob, configTime);
+
+// ONLY FOR COBA2
 // dwHotspotJob();
 // dbHotspotJob();
