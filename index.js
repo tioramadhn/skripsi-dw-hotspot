@@ -10,8 +10,8 @@ const DbHotspotJob = require("./services/DbHotspotJob");
 const { configTime } = require("./utils/config");
 const DwHotspotJob = require("./services/DwHotspotJob");
 const { configTime } = require("./utils/config");
-const prisma = new PrismaClient();
 
+const prisma = new PrismaClient();
 const db = new DbHotspotJob(prisma);
 const dw = new DwHotspotJob(prisma);
 
@@ -66,4 +66,4 @@ const dwHotspotJob = () => {
 cron.schedule("*/30 1-23 * * *", dbHotspotJob, configTime);
 cron.schedule("59 23 * * *", dwHotspotJob, configTime);
 // dwHotspotJob();
-dbHotspotJob();
+// dbHotspotJob();
